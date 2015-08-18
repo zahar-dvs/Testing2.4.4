@@ -1,6 +1,9 @@
 package com.springapp.mvc.domain;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "FORUM")
@@ -15,6 +18,17 @@ public class Forum {
 
     @Column(name = "USERNAME")
     private String userName;
+
+    @Column(name = "TIME")
+    private String time;
+
+    public String getTime() {
+        return String.valueOf(new StringBuffer(time).delete(time.length() - 2, time.length()));
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
 
     public int getId() {
         return id;

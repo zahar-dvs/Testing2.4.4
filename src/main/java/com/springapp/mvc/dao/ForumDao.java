@@ -4,6 +4,7 @@ import com.springapp.mvc.domain.Forum;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -31,5 +32,11 @@ public class ForumDao {
         forum.setPost(message);
         forum.setUserName(userName);
         openSession().save(forum);
+    }
+
+    public void deleteMessage(Integer id) {
+        Forum forum = (Forum) openSession().createCriteria(Forum.class).add(Restrictions.eq("id", id))
+                                                                        .uniqueResult();
+        openSession().delete(forum);
     }
 }

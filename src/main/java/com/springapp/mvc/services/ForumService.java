@@ -23,4 +23,9 @@ public class ForumService {
     public void saveMessage(String message, String userName) {
         forumDao.saveMessage(message, userName);
     }
+
+    @Transactional
+    public void deleteMessage(Integer id) {
+        forumDao.deleteMessage(id);
+    }
 }

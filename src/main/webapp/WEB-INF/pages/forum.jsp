@@ -3,6 +3,7 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <script type="text/javascript" src=http://code.jquery.com/jquery-1.7.js></script>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <html>
@@ -17,7 +18,6 @@
 
 <body>
 
-
 <table border="1" align="center" class="btn-block3" style = "text-align: left; width: 600px;">
   <tr align="center">
     <td>
@@ -26,9 +26,17 @@
     <td>
       Запостил
     </td>
+    <td>
+      Дата и время
+    </td>
+    <sec:authorize access="hasRole('ROLE_ADMIN')">
+    <td>
+      Удалить
+    </td>
+    </sec:authorize>
   </tr>
 <c:forEach items="${posts}" var="posts">
-<tr>
+  <tr>
 
   <td>
   ${posts.post}
@@ -36,8 +44,15 @@
   <td>
   ${posts.userName}
   </td>
+  <td>
+  ${posts.time}
+  </td>
+    <sec:authorize access="hasRole('ROLE_ADMIN')">
+      <td>
+        <input id="deleteMessage" type="button" value="Удалить" style="color: #d9534f; width: 100%;" onclick="deleteMessage(${posts.id})">
+      </td>
+    </sec:authorize>
 </tr>
-<br>
 </c:forEach>
 </table>
 <br>
@@ -68,7 +83,7 @@
 
   function addMessage() {
     var mes = $("#message").val();
-    if (mes != null) {
+    if (mes != '') {
       $.ajax({
         type: "POST",
         url: "/addMessage",
@@ -83,6 +98,19 @@
         }
       });
     }else alert("Введите сообщение");
+  }
+
+  function deleteMessage(id){
+    $.ajax({
+      type: "GET",
+      url: "/deleteMessage/"+id,
+      success: function (html) {
+        window.location.reload();
+      },
+      error: function() {
+        alert(Sorry);
+      }
+    });
   }
 
 </script>
